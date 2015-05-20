@@ -4,7 +4,7 @@ from modoboa.lib.exceptions import Conflict
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.contrib.auth.decorators import (
-    login_required, permission_required
+    login_required, user_passes_test
 )
 from django.core.urlresolvers import reverse
 import reversion
@@ -28,7 +28,7 @@ def _validate_alias(request, form, successmsg, callback=None):
 
 
 @login_required
-@permission_required("modoboa_admin.add_alias")
+@user_passes_test(lambda u: u.is_superuser)
 @reversion.create_revision()
 def newaliaspipe(request):
     if request.method == "POST":

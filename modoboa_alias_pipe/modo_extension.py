@@ -7,21 +7,24 @@ from modoboa.lib import events
 
 @events.observe("ExtraIdentitiesMenuEntries")
 def extra_identities_menu_entries(user):
-    return [
-        {"name": "newaliaspipe",
-         "label": _("Add alias pipe"),
-         "img": "fa fa-plus",
-         "url": reverse("modoboa_alias_pipe:alias_pipe_add"),
-         "modal": True,
-         "modalcb": "alias_pipe_add"}
-    ]
+    if user.is_superuser:
+        return [
+            {"name": "newaliaspipe",
+             "label": _("Add alias pipe"),
+             "img": "fa fa-plus",
+             "url": reverse("modoboa_alias_pipe:alias_pipe_add"),
+             "modal": True,
+             "modalcb": "alias_pipe_add"}
+        ]
+    else:
+        return []
 
 
 @events.observe("GetStaticContent")
 def get_static_content(caller, st_type, user):
     if (caller == 'identities') and (st_type == 'js'):
         return (
-            '<script type="text/javascript" src="/sitestatic/modoboa_alias_pipe/js/admin.js"></script>',
+            '<script type="text/javascript" src="/sitestatic/modoboa_alias_pipe/js/admin.js"></script>',  # NOQA
         )
 
 
