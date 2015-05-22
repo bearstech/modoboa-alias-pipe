@@ -40,6 +40,7 @@ AliasPipe.prototype = {
             this.get_load_page_args();
             this.end_of_list_reached();
         }
+        this.init_links(data);
     },
 
     /**
@@ -65,6 +66,9 @@ AliasPipe.prototype = {
         }
         this.navobj.baseurl($link.attr("href")).update();
     },
+    add_new_page: function(data, direction) {
+        this.init_links(data);
+    },
 
     reload_listing: function(data) {
         this.navobj.update(true);
@@ -87,6 +91,13 @@ AliasPipe.prototype = {
             dataType: "json"
         }).done(function(data) {
             $this.reload_listing(data.respmsg);
+        });
+    },
+    init_links: function(data) {
+        $("a[name=delaliaspipe]").confirm({
+            question: function() { return this.$element.attr('title'); },
+            method: "DELETE",
+            success_cb: $.proxy(this.reload_listing, this)
         });
     },
     get_domain_list: function() {
