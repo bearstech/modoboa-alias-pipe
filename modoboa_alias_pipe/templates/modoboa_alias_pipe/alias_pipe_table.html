@@ -1,0 +1,8 @@
+{% load i18n alias_pipe_tags lib_tags %}
+{% for row in objects %}
+<tr id="{{ row.id }}" name="{{ forloop.counter }}">
+  <td name="address">{% alias_pipe_modifiy_link row %}</td>
+  <td name="command">{{ row.command }}</td>
+  <td name="actions">{% alias_pipe_actions row %}</td>
+</tr>
+{% endfor %}

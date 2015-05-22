@@ -5,27 +5,23 @@ from modoboa.core.extensions import ModoExtension, exts_pool
 from modoboa.lib import events
 
 
-@events.observe("ExtraIdentitiesMenuEntries")
-def extra_identities_menu_entries(user):
-    if user.is_superuser:
-        return [
-            {"name": "newaliaspipe",
-             "label": _("Add alias pipe"),
-             "img": "fa fa-plus",
-             "url": reverse("modoboa_alias_pipe:alias_pipe_add"),
-             "modal": True,
-             "modalcb": "alias_pipe_add"}
-        ]
-    else:
+@events.observe("AdminMenuDisplay")
+def admin_menu(target, user):
+    if target != "top_menu":
         return []
 
+    entries = []
 
-@events.observe("GetStaticContent")
-def get_static_content(caller, st_type, user):
-    if (caller == 'identities') and (st_type == 'js'):
-        return (
-            '<script type="text/javascript" src="/sitestatic/modoboa_alias_pipe/js/admin.js"></script>',  # NOQA
-        )
+    if user.is_superuser:
+        entries += [
+            {
+                "name": "alias_pipe",
+                "url": reverse("modoboa_alias_pipe:list"),
+                "label": _("Alias commands")
+            }
+        ]
+
+    return entries
 
 
 class AdminConsole(ModoExtension):
