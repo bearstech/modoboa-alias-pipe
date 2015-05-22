@@ -24,7 +24,10 @@ def alias_pipe_actions(alias_pipe):
     return render_actions([
         {
             "name": "delaliaspipe",
-            "url": reverse("modoboa_alias_pipe:alias_pipe_delete"),
+            "url": reverse(
+                "modoboa_alias_pipe:alias_pipe_delete",
+                args=[alias_pipe.id]
+            ),
             "img": "fa fa-trash",
             "title": _("Delete %s?" % alias_pipe.full_address),
         }

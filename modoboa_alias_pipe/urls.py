@@ -7,5 +7,8 @@ urlpatterns = patterns(
     url(r'^list/$', '_list', name='_list'),
     url(r'^page/$', '_list', name='page'),
     url(r'^(?P<alias_pipe_id>\d+)/edit/$', 'edit', name='alias_pipe_change'),
-    url(r'^delete/$', 'delete', name='alias_pipe_delete')
+    url(
+        r'^(?P<alias_pipe_id>\d+)/delete/$',
+        'delete',
+        name='alias_pipe_delete')
 )

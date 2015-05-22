@@ -1,6 +1,6 @@
 from django.db import IntegrityError
 from django.db.models import Q
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, ungettext
 from django.shortcuts import render
 from django.contrib.auth.decorators import (
     login_required, user_passes_test
@@ -116,12 +116,6 @@ def _list(request):
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
-def get_next_page(request):
-    pass
-
-
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
 @ensure_csrf_cookie
 def edit(request, alias_pipe_id):
     alias_pipe = AliasPipe.objects.get(pk=alias_pipe_id)
@@ -147,5 +141,16 @@ def edit(request, alias_pipe_id):
         ctx)
 
 
-def delete(request):
-    pass
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def delete(request, alias_pipe_id):
+    alias_pipe = AliasPipe.objects.get(pk=alias_pipe_id)
+    full_address = alias_pipe.full_address
+    alias_pipe.delete()
+    return render_to_json_response(
+        ungettext(
+            "Alias pipe deleted %s" % full_address,
+            "Alias pipe deleted %s" % full_address,
+            1
+        )
+    )
