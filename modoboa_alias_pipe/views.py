@@ -1,6 +1,5 @@
 from django.db import IntegrityError
-from modoboa.lib.exceptions import Conflict
-
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.contrib.auth.decorators import (
@@ -9,6 +8,9 @@ from django.contrib.auth.decorators import (
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.urlresolvers import reverse
 import reversion
+
+from modoboa.lib.email_utils import split_mailbox
+from modoboa.lib.exceptions import Conflict
 from modoboa.lib.listing import get_listing_page
 from modoboa.lib.web_utils import _render_to_string, render_to_json_response
 
@@ -82,8 +84,18 @@ def list(request):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def _list(request):
-    # TODO append searchquery implentation
-    objects = AliasPipe.objects.select_related()
+    q = Q()
+    searchquery = request.GET.get('searchquery', None)
+    if searchquery:
+        local_part, domname = split_mailbox(searchquery)
+        if local_part:
+            q |= Q(address__icontains=local_part)
+        if domname:
+            q |= Q(domain__name__icontains=domname)
+
+        q |= Q(command__icontains=searchquery)
+
+    objects = AliasPipe.objects.filter(q).select_related()
     page = get_listing_page(objects, request.GET.get("page", 1))
 
     context = {}
