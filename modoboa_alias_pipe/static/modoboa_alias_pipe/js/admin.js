@@ -89,10 +89,6 @@ AliasPipe.prototype = {
             $this.reload_listing(data.respmsg);
         });
     },
-    add_new_page: function(data, direction) {
-        AliasPipe.prototype.add_new_page.call(this, data, direction);
-        this.init_identity_links(data);
-    },
     get_domain_list: function() {
         if (!this.domain_list.length) {
             $.ajax({
