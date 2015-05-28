@@ -10,5 +10,6 @@ urlpatterns = patterns(
     url(
         r'^(?P<alias_pipe_id>\d+)/delete/$',
         'delete',
-        name='alias_pipe_delete')
+        name='alias_pipe_delete'),
+    url(r'^import/$', 'alias_pipe_import', name="alias_pipe_import"),
 )

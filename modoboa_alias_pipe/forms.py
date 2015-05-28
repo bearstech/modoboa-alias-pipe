@@ -6,6 +6,7 @@ from modoboa.lib.exceptions import BadRequest
 from modoboa.lib.form_utils import DynamicForm
 from modoboa.lib.email_utils import split_mailbox
 from modoboa_admin.models import Domain
+from modoboa_admin.forms import ImportDataForm
 
 from .models import AliasPipe
 
@@ -94,3 +95,7 @@ class AliasPipeForm(forms.ModelForm, DynamicForm):
             self.save_m2m()
 
         return alias_pipe
+
+
+class AliasPipeImportForm(ImportDataForm):
+    pass

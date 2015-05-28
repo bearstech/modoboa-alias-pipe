@@ -159,7 +159,29 @@ AliasPipe.prototype = {
                 success_cb: $.proxy(this.reload_listing, this)
             });
         }, this));
-    }
+    },
+    importform_cb: function() {
+        $(".submit").one('click', function(e) {
+            e.preventDefault();
+            if ($("#id_sourcefile").val() === "") {
+                return;
+            }
+            $("#import_status").css("display", "block");
+            $("#import_result").html("").removeClass("alert alert-danger");
+            $("#aliaspipeimportform").submit();
+        });
+    },
+    importdone: function(status, msg) {
+        $("#import_status").css("display", "none");
+        if (status == "ok") {
+            $("#modalbox").modal('hide');
+            this.reload_listing(msg);
+        } else {
+            $("#import_result").addClass("alert alert-danger");
+            $("#import_result").html(msg);
+            this.importform_cb();
+        }
+    },
 };
 
 AliasPipe.prototype = $.extend({}, Listing.prototype, AliasPipe.prototype);

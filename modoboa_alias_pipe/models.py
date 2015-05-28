@@ -1,10 +1,14 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import ugettext as _, ugettext_lazy
 
 import reversion
 
 from modoboa_admin.models.domain import Domain
 from modoboa_admin.models.base import AdminObject
+from modoboa.lib.email_utils import split_mailbox
+from modoboa.lib.exceptions import (
+    PermDeniedException, BadRequest, Conflict
+)
 
 
 class AliasPipe(AdminObject):
@@ -28,5 +32,28 @@ class AliasPipe(AdminObject):
     def full_address(self):
         return "%s@%s" % (self.address, self.domain.name)
 
+    def from_csv(self, user, row, expected_elements=3):
+        if len(row) < expected_elements:
+            raise BadRequest(_("Invalid line: %s" % row))
+
+        localpart, domname = split_mailbox(row[0].strip())
+        try:
+            domain = Domain.objects.get(name=domname)
+        except Domain.DoesNotExist:
+            raise BadRequest(_("Domain '%s' does not exist" % domname))
+        if not user.can_access(domain):
+            raise PermDeniedException
+        try:
+            AliasPipe.objects.get(address=localpart, domain__name=domain)
+        except AliasPipe.DoesNotExist:
+            pass
+        else:
+            raise Conflict
+
+        self.address = localpart
+        self.domain = domain
+        self.enabled = (row[1].strip() in ["True", "1", "yes", "y"])
+        self.command = row[2].strip()
+        self.save()
 
 reversion.register(AliasPipe)

@@ -1,3 +1,5 @@
+import csv
+
 from django.db import IntegrityError
 from django.db.models import Q
 from django.utils.translation import ugettext as _, ungettext
@@ -13,8 +15,9 @@ from modoboa.lib.email_utils import split_mailbox
 from modoboa.lib.exceptions import Conflict
 from modoboa.lib.listing import get_listing_page
 from modoboa.lib.web_utils import _render_to_string, render_to_json_response
+from modoboa.lib.exceptions import ModoboaException
 
-from .forms import AliasPipeForm
+from .forms import AliasPipeForm, AliasPipeImportForm
 from .models import AliasPipe
 
 
@@ -76,6 +79,14 @@ def list(request):
                 "url": reverse("modoboa_alias_pipe:alias_pipe_add"),
                 "modal": True,
                 "modalcb": "alias_pipe.alias_pipe_add"
+            },
+            "import_entry": {
+                "name": "alias_pipe_import",
+                "label": _("Import"),
+                "img": "fa fa-folder-open",
+                "url": reverse("modoboa_alias_pipe:alias_pipe_import"),
+                "modal": True,
+                "modalcb": "alias_pipe.importform_cb"
             }
         }
     )
@@ -153,4 +164,77 @@ def delete(request, alias_pipe_id):
             "Alias pipe deleted %s" % full_address,
             1
         )
+    )
+
+
+def import_alias_pipe(user, row, formopts):
+    alias_pipe = AliasPipe()
+    alias_pipe.from_csv(user, row)
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def alias_pipe_import(request):
+    if request.method == "POST":
+        error = None
+        form = AliasPipeImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                reader = csv.reader(request.FILES['sourcefile'],
+                                    delimiter=form.cleaned_data['sepchar'])
+            except csv.Error as inst:
+                error = str(inst)
+
+            if error is None:
+                try:
+                    cpt = 0
+                    for row in reader:
+                        if not row:
+                            continue
+
+                        try:
+                            import_alias_pipe(
+                                request.user, row, form.cleaned_data)
+                        except Conflict:
+                            if form.cleaned_data["continue_if_exists"]:
+                                continue
+                            raise Conflict(
+                                _("Object already exists: %s"
+                                  % form.cleaned_data['sepchar'].join(row[:2]))
+                            )
+                        cpt += 1
+
+                    return render(request, "modoboa_alias_pipe/import_done.html", {
+                        "status": "ok",
+                        "msg": _("%d objects imported successfully" % cpt)
+                    })
+                except (ModoboaException) as e:
+                    error = str(e)
+
+        return render(request, "modoboa_alias_pipe/import_done.html", {
+            "status": "ko", "msg": error
+        })
+
+    helptext = _("""Provide a CSV file where lines respect the following formats:
+<ul>
+<li><em>address; enabled; |/path/to/command</em></li>
+</ul>
+
+<p>You can use a different character as separator.</p>
+""")
+
+    return render(
+        request,
+        "modoboa_alias_pipe/importform.html",
+        {
+            "title": _("Import alias pipe"),
+            "action": reverse("modoboa_alias_pipe:alias_pipe_import"),
+            "formid": "aliaspipeimportform",
+            "enctype": "multipart/form-data",
+            "action_label": _("Import"),
+            "action_classes": "submit",
+            "target": "import_target",
+            "form": AliasPipeImportForm(),
+            "helptext": helptext
+        }
     )
