@@ -1,8 +1,12 @@
+from django.dispatch import receiver
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _, ugettext_lazy
 
 from modoboa.core.extensions import ModoExtension, exts_pool
 from modoboa.lib import events
+from modoboa_admin import signals
+from modoboa.lib.email_utils import split_mailbox
+from .models import AliasPipe
 
 
 @events.observe("AdminMenuDisplay")
@@ -36,3 +40,13 @@ class AdminConsole(ModoExtension):
 
 
 exts_pool.register_extension(AdminConsole)
+
+
+@receiver(signals.use_external_recipients)
+def use_external_recipients_cb(sender, **kwargs):
+    localpart, domname = split_mailbox(kwargs['recipients'])
+    return (
+        AliasPipe.objects.filter(
+            address=localpart, domain__name=domname
+        ).first() is not None
+    )
