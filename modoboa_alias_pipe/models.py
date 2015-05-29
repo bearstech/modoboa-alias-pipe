@@ -44,7 +44,7 @@ class AliasPipe(AdminObject):
         if not user.can_access(domain):
             raise PermDeniedException
         try:
-            AliasPipe.objects.get(address=localpart, domain__name=domain)
+            AliasPipe.objects.get(address=localpart, domain__name=domname)
         except AliasPipe.DoesNotExist:
             pass
         else:
