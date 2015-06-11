@@ -21,7 +21,7 @@ def admin_menu(target, user):
             {
                 "name": "alias_pipe",
                 "url": reverse("modoboa_alias_pipe:list"),
-                "label": _("Alias commands")
+                "label": _("Commands alias")
             }
         ]
 
