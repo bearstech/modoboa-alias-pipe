@@ -21,7 +21,8 @@ class AliasPipeForm(forms.ModelForm, DynamicForm):
         widget=forms.TextInput(attrs={"class": "form-control"})
     )
     recipients = forms.CharField(
-        label=ugettext_lazy("Recipients"), required=False,
+        label=ugettext_lazy("Commands"), required=False,
+        help_text=ugettext_lazy("Absolute path to command, example /bin/date"),
         widget=forms.TextInput(attrs={"class": "form-control"})
     )
 
@@ -73,12 +74,7 @@ class AliasPipeForm(forms.ModelForm, DynamicForm):
             if v == "":
                 continue
 
-            if not v.startswith('|'):
-                raise BadRequest(
-                    u"%s %s" % (_("Invalid pipe command, command need to start with \"|\" character"), v)  # NOQA
-                )
-
-            self.ext_rcpts += [v]
+            self.ext_rcpts += [v.strip().lstrip('|')]
             total += 1
 
         if total == 0:

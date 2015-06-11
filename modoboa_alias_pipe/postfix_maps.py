@@ -12,6 +12,6 @@ class VirtualAliasesPipeMap(object):
 class AliasesPipeMap(object):
     filename = 'sql-aliases-pipe.cf'
 
-    mysql = "SELECT ap.command FROM alias_pipe ap INNER JOIN admin_domain dom ON ap.domain_id=dom.id WHERE concat(ap.address, '-', dom.name, '-pipe') = '%s' LIMIT 1"  # NOQA
+    mysql = "SELECT concat('|', ap.command) FROM alias_pipe ap INNER JOIN admin_domain dom ON ap.domain_id=dom.id WHERE concat(ap.address, '-', dom.name, '-pipe') = '%s' LIMIT 1"  # NOQA
 
 registry.add_files([VirtualAliasesPipeMap, AliasesPipeMap])

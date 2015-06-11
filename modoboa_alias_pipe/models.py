@@ -14,7 +14,10 @@ from modoboa.lib.exceptions import (
 class AliasPipe(AdminObject):
     address = models.CharField(ugettext_lazy('address'), max_length=254)
     domain = models.ForeignKey(Domain)
-    command = models.TextField(blank=False)
+    command = models.TextField(
+        help_text=ugettext_lazy("Absolute path to command, example /bin/date"),
+        blank=False
+    )
     enabled = models.BooleanField(
         ugettext_lazy('enabled'),
         help_text=ugettext_lazy("Check to activate this command"),
@@ -53,7 +56,7 @@ class AliasPipe(AdminObject):
         self.address = localpart
         self.domain = domain
         self.enabled = (row[1].strip() in ["True", "1", "yes", "y"])
-        self.command = row[2].strip()
+        self.command = row[2].strip().lstrip('|')
         self.save()
 
 reversion.register(AliasPipe)
