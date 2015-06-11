@@ -2,6 +2,7 @@ import sys
 import os.path
 import csv
 from optparse import make_option
+from progressbar import ProgressBar, Percentage, Bar, ETA
 
 from modoboa.core.models import User
 from django.core.management.base import BaseCommand
@@ -39,13 +40,19 @@ class Command(BaseCommand, CloseConnectionMixin):
                 print('File not found')
                 sys.exit(1)
 
+            num_lines = sum(1 for line in open(filename))
+            pbar = ProgressBar(
+                widgets=[Percentage(), Bar(), ETA()], maxval=num_lines
+            ).start()
             with open(filename, 'r') as f:
                 reader = csv.reader(f, delimiter=';')
+                i = 0
                 for row in reader:
+                    i += 1
+                    pbar.update(i)
                     if not row:
                         continue
 
-                    print(row)
                     try:
                         import_alias_pipe(superadmin, row, kwargs)
                     except Conflict:
@@ -56,3 +63,4 @@ class Command(BaseCommand, CloseConnectionMixin):
                             "Object already exists: %s"
                             % kwargs['sepchar'].join(row[:2])
                         )
+            pbar.finish()

@@ -1,2 +1,3 @@
 modoboa>=1.3.0
 modoboa-admin
+progressbar==2.3
