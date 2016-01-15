@@ -3,8 +3,8 @@ from django.utils.translation import ugettext as _, ugettext_lazy
 
 import reversion
 
-from modoboa_admin.models.domain import Domain
-from modoboa_admin.models.base import AdminObject
+from modoboa.admin.models.domain import Domain
+from modoboa.admin.models.base import AdminObject
 from modoboa.lib.email_utils import split_mailbox
 from modoboa.lib.exceptions import (
     PermDeniedException, BadRequest, Conflict
