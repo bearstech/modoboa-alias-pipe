@@ -59,4 +59,11 @@ class AliasPipe(AdminObject):
         self.command = row[2].strip().lstrip('|')
         self.save()
 
+    def to_csv(self, csvwriter):
+        csvwriter.writerow([
+            '%s@%s' % (self.domain, self.address),
+            self.enabled,
+            self.command
+        ])
+
 reversion.register(AliasPipe)
