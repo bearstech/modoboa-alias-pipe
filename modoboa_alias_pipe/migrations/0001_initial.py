@@ -7,7 +7,6 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('modoboa_admin', '0002_rename_content_types'),
     ]
 
     operations = [
@@ -18,8 +17,8 @@ class Migration(migrations.Migration):
                 ('address', models.CharField(max_length=254, verbose_name='address')),
                 ('command', models.TextField()),
                 ('enabled', models.BooleanField(default=True, help_text='Check to activate this command', verbose_name='enabled')),
-                ('dates', models.ForeignKey(to='modoboa_admin.ObjectDates')),
-                ('domain', models.ForeignKey(to='modoboa_admin.Domain')),
+                ('dates', models.ForeignKey(to='modoboa.admin.ObjectDates')),
+                ('domain', models.ForeignKey(to='modoboa.admin.Domain')),
             ],
             options={
                 'db_table': 'alias_pipe',
