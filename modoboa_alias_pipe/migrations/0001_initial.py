@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('admin', '0003_auto_20151118_1215'),
     ]
 
     operations = [
@@ -15,14 +16,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('address', models.CharField(max_length=254, verbose_name='address')),
-                ('command', models.TextField()),
+                ('command', models.TextField(help_text='Absolute path to command, example /bin/date')),
                 ('enabled', models.BooleanField(default=True, help_text='Check to activate this command', verbose_name='enabled')),
-                ('dates', models.ForeignKey(to='modoboa.admin.ObjectDates')),
-                ('domain', models.ForeignKey(to='modoboa.admin.Domain')),
+                ('dates', models.ForeignKey(to='admin.ObjectDates')),
+                ('domain', models.ForeignKey(to='admin.Domain')),
             ],
             options={
                 'db_table': 'alias_pipe',
             },
-            bases=(models.Model,),
         ),
     ]
