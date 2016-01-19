@@ -5,8 +5,8 @@ from django.utils.translation import ugettext as _, ugettext_lazy
 from modoboa.lib.exceptions import BadRequest
 from modoboa.lib.form_utils import DynamicForm
 from modoboa.lib.email_utils import split_mailbox
-from modoboa_admin.models import Domain
-from modoboa_admin.forms import ImportDataForm
+from modoboa.admin.models import Domain
+from modoboa.admin.forms import ImportDataForm
 
 from .models import AliasPipe
 

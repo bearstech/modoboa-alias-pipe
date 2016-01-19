@@ -4,7 +4,7 @@ from django.utils.translation import ugettext as _, ugettext_lazy
 
 from modoboa.core.extensions import ModoExtension, exts_pool
 from modoboa.lib import events
-from modoboa_admin import signals
+from modoboa.admin import signals
 from modoboa.lib.email_utils import split_mailbox
 from .models import AliasPipe
 
