@@ -7,7 +7,7 @@
 {% block pagetitle %}{% trans "Alias commands" %}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'modoboa_admin/css/admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.sortable.css' %}" />
 {% endblock %}
 
@@ -23,7 +23,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     alias_pipe = new AliasPipe({
-        domain_list_url: "{% url 'modoboa_admin:domain_flat_list' %}",
+        domain_list_url: "{% url 'admin:domain_flat_list' %}",
         load_page_url: "{% url 'modoboa_alias_pipe:page' %}"
     });
 });
@@ -42,7 +42,7 @@ $(document).ready(function() {
 {% block apparea %}
 <div class="row">
   <div class="col-sm-5">
-    {% include "modoboa_admin/searchform.html" %}
+    {% include "admin/searchform.html" %}
   </div>
 </div>
 
