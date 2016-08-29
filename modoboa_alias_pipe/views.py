@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import (
 )
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.urlresolvers import reverse
-import reversion
 
 from modoboa.lib.email_utils import split_mailbox
 from modoboa.lib.exceptions import Conflict
@@ -20,6 +19,10 @@ from modoboa.lib.exceptions import ModoboaException
 from .forms import AliasPipeForm, AliasPipeImportForm
 from .models import AliasPipe
 
+try:
+    from reversion import create_revision
+except ImportError:
+    from reversion.revisions import create_revision
 
 def _validate_alias(request, form, successmsg, callback=None):
     if form.is_valid():
@@ -37,7 +40,7 @@ def _validate_alias(request, form, successmsg, callback=None):
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
-@reversion.create_revision()
+@create_revision()
 def newaliaspipe(request):
     if request.method == "POST":
         def callback(user, alias):

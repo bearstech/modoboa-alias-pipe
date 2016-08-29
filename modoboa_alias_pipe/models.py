@@ -1,14 +1,17 @@
 from django.db import models
 from django.utils.translation import ugettext as _, ugettext_lazy
 
-import reversion
-
 from modoboa.admin.models.domain import Domain
 from modoboa.admin.models.base import AdminObject
 from modoboa.lib.email_utils import split_mailbox
 from modoboa.lib.exceptions import (
     PermDeniedException, BadRequest, Conflict
 )
+
+try:
+    from reversion import register
+except ImportError:
+    from reversion.revisions import register
 
 
 class AliasPipe(AdminObject):
@@ -66,4 +69,4 @@ class AliasPipe(AdminObject):
             self.command
         ])
 
-reversion.register(AliasPipe)
+register(AliasPipe)
