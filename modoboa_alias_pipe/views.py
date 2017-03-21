@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django.utils.translation import ugettext as _, ungettext
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.contrib.auth.decorators import (
     login_required, user_passes_test
 )
@@ -13,7 +14,7 @@ from django.core.urlresolvers import reverse
 from modoboa.lib.email_utils import split_mailbox
 from modoboa.lib.exceptions import Conflict
 from modoboa.lib.listing import get_listing_page
-from modoboa.lib.web_utils import _render_to_string, render_to_json_response
+from modoboa.lib.web_utils import render_to_json_response
 from modoboa.lib.exceptions import ModoboaException
 
 from .forms import AliasPipeForm, AliasPipeImportForm
@@ -116,12 +117,12 @@ def _list(request):
     if page is None:
         context["length"] = 0
     else:
-        context["headers"] = _render_to_string(
-            request, "modoboa_alias_pipe/alias_pipe_headers.html", {})
-        context["rows"] = _render_to_string(
-            request, "modoboa_alias_pipe/alias_pipe_table.html", {
+        context["headers"] = render_to_string(
+            "modoboa_alias_pipe/alias_pipe_headers.html", {}, request)
+        context["rows"] = render_to_string(
+            "modoboa_alias_pipe/alias_pipe_table.html", {
                 "objects": page.object_list
-            }
+            }, request
         )
         context["pages"] = [page.number]
 

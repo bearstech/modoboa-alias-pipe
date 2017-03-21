@@ -1,15 +1,15 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from . import views
 
-urlpatterns = patterns(
-    'modoboa_alias_pipe.views',
-    url(r'^alias_pipe/new/$', 'newaliaspipe', name='alias_pipe_add'),
-    url(r'^$', 'list', name='list'),
-    url(r'^list/$', '_list', name='_list'),
-    url(r'^page/$', '_list', name='page'),
-    url(r'^(?P<alias_pipe_id>\d+)/edit/$', 'edit', name='alias_pipe_change'),
+urlpatterns = [
+    url(r'^alias_pipe/new/$', views.newaliaspipe, name='alias_pipe_add'),
+    url(r'^$', views.list, name='list'),
+    url(r'^list/$', views._list, name='_list'),
+    url(r'^page/$', views._list, name='page'),
+    url(r'^(?P<alias_pipe_id>\d+)/edit/$', views.edit, name='alias_pipe_change'),
     url(
         r'^(?P<alias_pipe_id>\d+)/delete/$',
-        'delete',
+        views.delete,
         name='alias_pipe_delete'),
-    url(r'^import/$', 'alias_pipe_import', name="alias_pipe_import"),
-)
+    url(r'^import/$', views.alias_pipe_import, name="alias_pipe_import"),
+]

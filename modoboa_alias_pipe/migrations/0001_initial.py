@@ -18,7 +18,6 @@ class Migration(migrations.Migration):
                 ('address', models.CharField(max_length=254, verbose_name='address')),
                 ('command', models.TextField(help_text='Absolute path to command, example /bin/date')),
                 ('enabled', models.BooleanField(default=True, help_text='Check to activate this command', verbose_name='enabled')),
-                ('dates', models.ForeignKey(to='admin.ObjectDates')),
                 ('domain', models.ForeignKey(to='admin.Domain')),
             ],
             options={
