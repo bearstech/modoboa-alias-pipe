@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('address', models.CharField(max_length=254, verbose_name='address')),
                 ('command', models.TextField(help_text='Absolute path to command, example /bin/date')),
                 ('enabled', models.BooleanField(default=True, help_text='Check to activate this command', verbose_name='enabled')),
-                ('domain', models.ForeignKey(to='admin.Domain')),
+                ('domain', models.ForeignKey(to='admin.Domain', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'alias_pipe',

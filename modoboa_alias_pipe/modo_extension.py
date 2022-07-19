@@ -1,5 +1,5 @@
 from django.dispatch import receiver
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext as _, ugettext_lazy
 
 from modoboa.core.extensions import ModoExtension, exts_pool

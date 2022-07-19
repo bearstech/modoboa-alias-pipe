@@ -16,7 +16,7 @@ except ImportError:
 
 class AliasPipe(AdminObject):
     address = models.CharField(ugettext_lazy('address'), max_length=254)
-    domain = models.ForeignKey(Domain)
+    domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
     command = models.TextField(
         help_text=ugettext_lazy("Absolute path to command, example /bin/date"),
         blank=False
@@ -68,5 +68,6 @@ class AliasPipe(AdminObject):
             self.enabled,
             self.command
         ])
+
 
 register(AliasPipe)
