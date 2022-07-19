@@ -1,2 +1,1 @@
 modoboa>=1.4.2
-progressbar==2.3
