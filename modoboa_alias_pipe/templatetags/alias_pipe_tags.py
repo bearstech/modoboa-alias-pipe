@@ -1,5 +1,5 @@
 from django import template
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from modoboa.lib.templatetags.lib_tags import render_link
 from modoboa.lib.web_utils import render_actions
 from django.utils.translation import ugettext as _
