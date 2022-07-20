@@ -13,7 +13,7 @@ def alias_pipe_modifiy_link(alias_pipe):
         "label": alias_pipe.full_address,
         "modal": True,
         "url": reverse(
-            "modoboa_alias_pipe:alias_pipe_change",
+            "modoboa_alias_pipe:change",
             args=[alias_pipe.id]),
         "modalcb": "alias_pipe.alias_pipe_change"
     })
@@ -25,7 +25,7 @@ def alias_pipe_actions(alias_pipe):
         {
             "name": "delaliaspipe",
             "url": reverse(
-                "modoboa_alias_pipe:alias_pipe_delete",
+                "modoboa_alias_pipe:delete",
                 args=[alias_pipe.id]
             ),
             "img": "fa fa-trash",

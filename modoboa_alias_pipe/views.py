@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import (
     login_required, user_passes_test
 )
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from modoboa.lib.email_utils import split_mailbox
 from modoboa.lib.exceptions import Conflict
@@ -57,7 +57,7 @@ def newaliaspipe(request):
         "modoboa_alias_pipe/aliaspipeform.html",
         {
             "title": _("New alias pipe"),
-            "action": reverse("modoboa_alias_pipe:alias_pipe_add"),
+            "action": reverse("modoboa_alias_pipe:add"),
             "formid": "aliaspipeform",
             "action_label": _("Create"),
             "action_classes": "submit",
@@ -80,7 +80,7 @@ def list(request):
                 "name": "newaliaspipe",
                 "label": _("Add alias pipe"),
                 "img": "fa fa-plus",
-                "url": reverse("modoboa_alias_pipe:alias_pipe_add"),
+                "url": reverse("modoboa_alias_pipe:add"),
                 "modal": True,
                 "modalcb": "alias_pipe.alias_pipe_add"
             },
@@ -88,7 +88,7 @@ def list(request):
                 "name": "alias_pipe_import",
                 "label": _("Import"),
                 "img": "fa fa-folder-open",
-                "url": reverse("modoboa_alias_pipe:alias_pipe_import"),
+                "url": reverse("modoboa_alias_pipe:import"),
                 "modal": True,
                 "modalcb": "alias_pipe.importform_cb"
             }
@@ -137,7 +137,7 @@ def edit(request, alias_pipe_id):
 
     ctx = {
         'action': reverse(
-            'modoboa_alias_pipe:alias_pipe_change',
+            'modoboa_alias_pipe:change',
             args=[alias_pipe.id]),
         'formid': 'aliaspipeform',
         'title': alias_pipe.full_address,
@@ -232,7 +232,7 @@ def alias_pipe_import(request):
         "modoboa_alias_pipe/importform.html",
         {
             "title": _("Import alias pipe"),
-            "action": reverse("modoboa_alias_pipe:alias_pipe_import"),
+            "action": reverse("modoboa_alias_pipe:import"),
             "formid": "aliaspipeimportform",
             "enctype": "multipart/form-data",
             "action_label": _("Import"),

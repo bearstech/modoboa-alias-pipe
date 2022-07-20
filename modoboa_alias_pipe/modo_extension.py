@@ -36,7 +36,7 @@ class AdminConsole(ModoExtension):
         "Console to manage alias pipe command"
     )
     always_active = True
-    url = "alias-pipe"
+    url = "modoboa_alias_pipe"
 
 
 exts_pool.register_extension(AdminConsole)
